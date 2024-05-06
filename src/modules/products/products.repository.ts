@@ -1,13 +1,31 @@
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { InjectModel } from 'nestjs-typegoose';
-import { Product, ProductDocument } from 'src/common/entity';
-//import { BaseMongooseRepository } from 'src/common/repository';
+import { Product, ProductDocument } from 'src/common/entity/product.schema';
+import { BaseMongoRepository } from 'src/common/repository';
 
-export class ProducRepository {
+@Injectable()
+export class ProductRepository extends BaseMongoRepository<ProductDocument> {
+  // constructor(
+  //   @InjectModel(Product.name) private readonly model: Model<ProductDocument>,
+  // ) {
+  //   super(model);
+  // }
+
+  protected readonly model: Model<ProductDocument>;
+
   constructor(
-    @InjectModel(Product) private productModel: Model<ProductDocument>,
-  ) {}
-  async getAll() {
-    return await this.productModel.find().exec();
+    @InjectModel(Product.name) mongoRepository: Model<ProductDocument>,
+  ) {
+    super(mongoRepository);
+    this.model = mongoRepository;
+  }
+
+  async getAll(): Promise<Product[]> {
+    return await this.findAll();
+  }
+
+  async createProduct(dto: any): Promise<Product> {
+    return await this.create(dto);
   }
 }

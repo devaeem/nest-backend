@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from 'src/common/entity';
 // import { CreateProductDto } from './dto/create-product.dto';
@@ -11,5 +11,10 @@ export class ProductsController {
   @Get()
   findAll(): Promise<Product[]> {
     return this.productsService.findAll();
+  }
+
+  @Post()
+  AddProduct(@Body() dto: any) {
+    return this.productsService.careate(dto);
   }
 }

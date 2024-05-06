@@ -1,10 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, SchemaOptions } from 'mongoose';
 import { EntityBase } from '../entitybase';
 
 export type ProductDocument = Product & Document;
 
-@Schema()
+const options: SchemaOptions = {
+  collection: 'products',
+};
+@Schema({ ...options, timestamps: true })
 export class Product extends EntityBase {
   @Prop({ required: true })
   name: string;
